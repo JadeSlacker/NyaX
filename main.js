@@ -29,6 +29,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const POSTS_PER_PAGE = 15;
 
     let isDarkmode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    let emoji_picker_theme = "light";
 
      // --- 2. アイコンSVG定義 ---
     const ICONS = {
@@ -47,6 +48,8 @@ window.addEventListener('DOMContentLoaded', () => {
         copy: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`,
         repost: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="M7 22l-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg>`,
         pin: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V17z"></path><line x1="12" y1="17" x2="12" y2="22"></line></svg>`,
+        flag: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>`,
+        flag_filled: `<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" y1="22" x2="4" y2="15"></line></svg>`,
         emoji: `<svg viewBox="0,0,17.13786,14.47712" fill="currentColor" stroke="none" stroke-width="0.5" stroke-miterlimit="10"><g transform="translate(-231.43107,-172.76144)"><path d="M239.94712,186.81929c-0.0507,0.41926 -0.49531,0.41927 -0.49531,0.41927c-3.96787,0 -8.01249,-0.68535 -8.02074,-5.61285c0.17537,-2.64023 1.74956,-4.43331 2.70713,-6.82761c0.16543,-0.41362 0.45628,-1.91295 0.94891,-2.02221c1.10065,-0.2441 2.66273,2.67451 2.86873,3.4552c0.31374,0.81649 3.15293,0.99792 3.94628,0.24025c0.52177,-0.4983 0.89896,-3.42207 1.84402,-3.42151c1.12146,0.00067 2.30001,2.5981 2.70772,3.35984c0.28978,1.21395 1.21609,1.24536 1.72418,2.54303c1.5838,4.04503 -1.95067,5.61523 -5.12606,6.89251c-1.04106,0.43359 -1.98213,0.90597 -3.10486,0.97409zM239.12209,186.23762c0.05606,-0.41004 0.49412,-0.41004 0.49412,-0.41004h0.0822c1.08582,0.00791 1.99423,-0.49911 2.97557,-0.90816c0.90613,-0.36021 4.40914,-1.62575 4.69789,-2.51803c0.91767,-2.83576 -1.39409,-3.5574 -1.85281,-5.63655c-0.29134,-0.52115 -1.70912,-2.14942 -1.64872,-2.72273c0.04683,-0.4445 -0.19827,0.87957 -0.39231,1.28221c-0.2529,0.52475 -0.45183,1.48329 -0.88714,1.87204c-1.38878,1.24023 -4.99067,0.88942 -5.58856,-0.66392c-0.06813,-0.293 -1.17064,-1.8955 -1.53788,-2.53236c-0.07769,0.34794 -0.29151,0.90382 -0.39826,1.17066c-0.29222,0.73044 -0.44273,1.50704 -0.74532,2.23256c-0.71976,1.7258 -1.74751,2.12166 -1.89035,4.25572c-0.00851,4.18415 3.41992,4.55867 6.69156,4.57862z"/><path d="M238.45934,181.66821c-0.35355,0.35356 -0.70711,0 -0.70711,0l-0.18648,-0.23974c-0.16632,-0.39918 -0.61694,-1.00924 -0.81966,-1.49844c-0.30124,0.60062 -0.60549,1.16756 -1.03983,1.70125c0,0 -0.31662,0.38698 -0.7036,0.07036c-0.38698,-0.31662 -0.07036,-0.7036 -0.07036,-0.7036c0.45322,-0.55057 0.73715,-1.14917 1.05641,-1.78332l0.14449,-0.46957c0.05931,-0.20994 0.25229,-0.36377 0.48121,-0.36377c0.18932,0 0.35406,0.10521 0.43894,0.26035l0.30916,0.54103l-0.01905,0.01088c0.47079,0.53548 0.82099,1.07173 1.14536,1.85022l-0.02949,-0.08275c0,0 0.35355,0.35356 0,0.70711z"/><path d="M244.58258,181.789c-0.47434,0.15812 -0.63245,-0.31623 -0.63245,-0.31623l-0.08204,-0.24655c-0.7487,-2.49444 -1.20387,-2.36025 -1.86474,0.13877c0,0 -0.12883,0.48311 -0.61194,0.35429c-0.48311,-0.12883 -0.35429,-0.61195 -0.35429,-0.61195c0.13898,-0.51735 0.96019,-3.11558 1.79527,-3.07868c0.83267,0.0368 1.77893,2.22608 1.99149,2.90349l0.07495,0.2244c0,0 0.15811,0.47434 -0.31623,0.63245z"/></g></svg>`,
         nyax_logo: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0,0,86.03313,99.70458"><g transform="translate(-196.60558,-130.32065)"><g fill="currentColor" stroke="none"><path d="M196.60559,230.02523l0,-70.13795l17.47488,-0.00265l0.02074,39.64497l14.92353,-19.35604l-14.9511,-20.28628l-17.46804,0v-29.56663h18.56125l24.87297,33.70192l24.96791,-33.70192h17.63101l0,29.64857l-17.18324,0l-15.17417,19.90152l15.22948,20.56652l-0.05143,-40.54738l17.17935,0.07934l0,70.05601h-17.47906l-25.25271,-34.55634l-24.3983,34.55634z"/></g></g></svg>`,
     };
@@ -281,7 +284,7 @@ window.addEventListener('DOMContentLoaded', () => {
             processed = getEmoji(processed);
 
             // 4. ハッシュタグとメンションを置換
-            const hashtagRegex = /#([a-zA-Z0-9\u3040-\u30FF\u4E00-\u9FFF_!?.-]+)/g;
+            const hashtagRegex = /#([^<>/@#\s]+)/g;
             processed = processed.replace(hashtagRegex, (match, tagName) => {
                 return `<a href="#search/${encodeURIComponent(tagName)}" onclick="event.stopPropagation()">#${getEmoji(tagName)}</a>`;
             });
@@ -352,6 +355,94 @@ window.addEventListener('DOMContentLoaded', () => {
         else return false;
     }
 
+    async function emoji_picker_create(container){
+        // ここからEmoji Mart
+        let _custom_emoji = await custom_emoji;
+        let custom = [];
+        let value_e;
+        for (let i = 0; i < _custom_emoji.length; i++){
+            value_e = _custom_emoji[i];
+            custom.push({
+                id: value_e.id,
+                name: value_e.name,
+                keywords: [
+                    value_e.id,
+                    value_e.name,
+                    "NyaXEmoji"
+                ],
+                skins: [
+                    {
+                        src: `emoji/${value_e.id}.svg`
+                    }
+                ],
+            });
+        }
+
+        const picker = container.querySelector('#emoji-picker');
+        const pic_button = container.querySelector('.emoji-pic-button');
+        const pickerOptions = {
+            onEmojiSelect: (emoji) => {
+                let textarea = container.querySelector('textarea');
+                const text_start = textarea.selectionStart;
+                const text_end = textarea.selectionEnd;
+                const text = textarea.value;
+                
+                let moji;
+                if(emoji.keywords.includes("NyaXEmoji")) moji = `${isNotBlank(text.slice(text_start - 1, text_start)) ? " " : ""}_${emoji.id}_${(isNotBlank(text.slice(text_end, text_end + 1)) || text.slice(text_end, text_end + 1) == '') ? " " : ""}`;
+                else moji = emoji.native;
+
+                textarea.value = text.slice(0, text_start) + moji + text.slice(text_end);
+                textarea.focus();
+                textarea.setSelectionRange(text_start + moji.length, text_start + moji.length);
+
+                picker.classList.add('hidden');
+            },
+            set: "native",
+            searchPosition: "none",
+            locale: "ja",
+            custom: [
+                {
+                    id: 'nyax',
+                    name: 'NyaXEmoji',
+                    emojis: custom
+                }
+            ],
+            categoryIcons: {
+                nyax: {
+                    svg: ICONS.nyax_logo
+                }
+            },
+            categories: ['frequent', 'nyax', 'people', 'nature', 'foods', 'activity', 'places', 'objects', 'symbols', 'flags'],
+            skinTonePosition: 'none',
+            skin: '1',
+            theme: emoji_picker_theme
+        };
+        const picker_modal = new EmojiMart.Picker(pickerOptions);
+        picker.appendChild(picker_modal);
+
+        pic_button.addEventListener('click', () => {
+            picker.classList.toggle('hidden');
+
+            if(!picker.classList.contains('hidden')) {
+                const buttonRect = pic_button.getBoundingClientRect();
+                const pickerWidth = 320;
+                const pickerHeight = 400;
+                let left = buttonRect.left;
+                let top = buttonRect.top;
+
+                if (left + pickerWidth > window.innerWidth) left = window.innerWidth - pickerWidth - 8;
+                if (left < 8) left = 8;
+                if (top < 8) top = buttonRect.buttom + 8;
+
+                picker.style.left = `${left}px`;
+                picker.style.top = `${top + 50}px`;
+            }
+        });
+        
+        container.querySelector('textarea').addEventListener('focus', () => picker.classList.add('hidden'));
+        // ここまでEmoji Mart
+    }
+
     // --- 5. ルーティングと画面管理 ---
     async function router() {
         showLoading(true);
@@ -363,25 +454,27 @@ window.addEventListener('DOMContentLoaded', () => {
             if (currentUser.settings?.theme == 'dark'){
                 document.body.classList.remove('light');
                 document.body.classList.add('dark');
+                emoji_picker_theme = "dark";
             }
             else if (currentUser.settings?.theme == 'auto'){
                 if (isDarkmode) {
                     document.body.classList.remove('light');
                     document.body.classList.add('dark');
+                    emoji_picker_theme = "dark";
                 } else {
                     document.body.classList.add('light');
                     document.body.classList.remove('dark');
-                    emojiTheme = 'light';
+                    emoji_picker_theme = 'light';
                 }
             } else {
                 document.body.classList.add('light');
                 document.body.classList.remove('dark');
-                emojiTheme = 'light';
+                emoji_picker_theme = 'light';
             }
         } else {
             document.body.classList.add('light');
             document.body.classList.remove('dark');
-            emojiTheme = 'light';
+            emoji_picker_theme = 'light';
         }
 
         if (currentDmChannel) supabase.removeChannel(currentDmChannel);
@@ -887,90 +980,7 @@ window.addEventListener('DOMContentLoaded', () => {
             </div>`;
     }
     async function attachPostFormListeners(container) {
-        // ここからEmoji Mart
-        let _custom_emoji = await custom_emoji;
-        let custom = [];
-        let value_e;
-        for (let i = 0; i < _custom_emoji.length; i++){
-            value_e = _custom_emoji[i];
-            custom.push({
-                id: value_e.id,
-                name: value_e.name,
-                keywords: [
-                    value_e.id,
-                    value_e.name,
-                    "NyaXEmoji"
-                ],
-                skins: [
-                    {
-                        src: `emoji/${value_e.id}.svg`
-                    }
-                ],
-            });
-        }
-
-        const picker = container.querySelector('#emoji-picker');
-        const pic_button = container.querySelector('.emoji-pic-button');
-        const pickerOptions = {
-            onEmojiSelect: (emoji) => {
-                let textarea = container.querySelector('textarea');
-                const text_start = textarea.selectionStart;
-                const text_end = textarea.selectionEnd;
-                const text = textarea.value;
-                
-                let moji;
-                if(emoji.keywords.includes("NyaXEmoji")) moji = `${isNotBlank(text.slice(text_start - 1, text_start)) ? " " : ""}_${emoji.id}_${(isNotBlank(text.slice(text_end, text_end + 1)) || text.slice(text_end, text_end + 1) == '') ? " " : ""}`;
-                else moji = emoji.native;
-
-                textarea.value = text.slice(0, text_start) + moji + text.slice(text_end);
-                textarea.focus();
-                textarea.setSelectionRange(text_start + moji.length, text_start + moji.length);
-
-                picker.classList.add('hidden');
-            },
-            set: "native",
-            searchPosition: "none",
-            locale: "ja",
-            custom: [
-                {
-                    id: 'nyax',
-                    name: 'NyaXEmoji',
-                    emojis: custom
-                }
-            ],
-            categoryIcons: {
-                nyax: {
-                    svg: ICONS.nyax_logo
-                }
-            },
-            categories: ['frequent', 'nyax', 'people', 'nature', 'foods', 'activity', 'places', 'objects', 'symbols', 'flags'],
-                skinTonePosition: 'none',
-                skin: '1'
-        };
-        const picker_modal = new EmojiMart.Picker(pickerOptions);
-        picker.appendChild(picker_modal);
-
-        pic_button.addEventListener('click', () => {
-            picker.classList.toggle('hidden');
-
-            if(!picker.classList.contains('hidden')) {
-                const buttonRect = pic_button.getBoundingClientRect();
-                const pickerWidth = 320;
-                const pickerHeight = 400;
-                let left = buttonRect.left;
-                let top = buttonRect.top;
-
-                if (left + pickerWidth > window.innerWidth) left = window.innerWidth - pickerWidth - 8;
-                if (left < 8) left = 8;
-                if (top < 8) top = buttonRect.buttom + 8;
-
-                picker.style.left = `${left}px`;
-                picker.style.top = `${top + 50}px`;
-            }
-        });
-        
-        container.querySelector('textarea').addEventListener('focus', () => picker.classList.add('hidden'));
-        // ここまでEmoji Mart
+        await emoji_picker_create(container);
         
         container.querySelector('.attachment-button').addEventListener('click', () => {
             container.querySelector('#file-input').click();
@@ -988,27 +998,58 @@ window.addEventListener('DOMContentLoaded', () => {
         selectedFiles.forEach((file, index) => {
             const previewItem = document.createElement('div');
             previewItem.className = 'file-preview-item';
+    
+            // デフォルトではスポイラーなしにしている
+            previewItem.dataset.spoiler = "false";
+            previewItem.dataset.index = index;
+
+            const removeBtn = `<button class="file-preview-remove" data-index="${index}">×</button>`;
             
+            // スポイラーボタン (画像のみ)
+            let spoilerBtn = '';
+            if (file.type.startsWith('image/')) {
+                spoilerBtn = `<button class="spoiler-toggle-btn" title="センシティブ設定 (クリックで切り替え)">${ICONS.flag}</button>`;
+            }
+            
+            // 旗アイコンを追加
+            const attachFlagEvent = () => {
+                const btn = previewItem.querySelector('.spoiler-toggle-btn'); 
+                if (btn) {
+                    btn.onclick = (e) => {
+                        e.stopPropagation();
+                        const isSpoiler = previewItem.dataset.spoiler === "true";
+                        if (isSpoiler) {
+                            previewItem.dataset.spoiler = "false";
+                            btn.classList.remove('active');
+                            btn.innerHTML = ICONS.flag;
+                        } else {
+                            previewItem.dataset.spoiler = "true";
+                            btn.classList.add('active');
+                            btn.innerHTML = ICONS.flag_filled;
+                        }
+                    };
+                }
+            };
+                    
             if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    previewItem.innerHTML = `<img src="${e.target.result}" alt="${file.name}"><button class="file-preview-remove" data-index="${index}">×</button>`;
+                    previewItem.innerHTML = `${spoilerBtn}<img src="${e.target.result}" alt="${file.name}">${removeBtn}`;
                     previewContainer.appendChild(previewItem);
+                    attachFlagEvent();
                 };
                 reader.readAsDataURL(file);
             } else if (file.type.startsWith('video/')) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    previewItem.innerHTML = `<video src="${e.target.result}" controls></video><button class="file-preview-remove" data-index="${index}">×</button>`;
+                    previewItem.innerHTML = `<video src="${e.target.result}" controls></video>${removeBtn}`;
                     previewContainer.appendChild(previewItem);
                 };
                 reader.readAsDataURL(file);
             } else if (file.type.startsWith('audio/')) {
                 previewItem.innerHTML = `<span>${getEmoji("🎵")} ${getEmoji(escapeHTML(file.name))}</span><button class="file-preview-remove" data-index="${index}">×</button>`;
-                previewContainer.appendChild(previewItem);
             } else {
                 previewItem.innerHTML = `<span>${getEmoji("📄")} ${getEmoji(escapeHTML(file.name))}</span><button class="file-preview-remove" data-index="${index}">×</button>`;
-                previewContainer.appendChild(previewItem);
             }
         });
         
@@ -1039,10 +1080,27 @@ window.addEventListener('DOMContentLoaded', () => {
         let uploadedFileIds = []; // 削除用にファイルIDを保持
 
         try {
+            const previewItems = container.querySelectorAll('.file-preview-item');  // プレビュー要素を取得
+
             // 1. ファイルがあれば先にアップロード
-            for (const file of selectedFiles) {
+            for (let i = 0; i < selectedFiles.length; i++) {
+                let file = selectedFiles[i];
+                const previewItem = previewItems[i];
+
+                // スポイラーフラグが立っているか確認
+                if (previewItem && previewItem.dataset.spoiler === "true") {
+                    // 拡張子の前に "_SPOILER" を挿入してファイル名を変更
+                    const nameParts = file.name.split('.');
+                    const ext = nameParts.length > 1 ? `.${nameParts.pop()}` : '';
+                    const baseName = nameParts.join('.');
+                    const newName = `${baseName}_SPOILER${ext}`;
+
+                    file = new File([file], newName, { type: file.type });
+                }
+
                 const fileId = await uploadFileViaEdgeFunction(file);
                 uploadedFileIds.push(fileId); // 削除候補としてIDを保存
+                
                 const fileType = file.type.startsWith('image/') ? 'image' : (file.type.startsWith('video/') ? 'video' : (file.type.startsWith('audio/') ? 'audio' : 'file'));
                 attachmentsData.push({ type: fileType, id: fileId, name: file.name });
             }
@@ -1428,14 +1486,48 @@ window.addEventListener('DOMContentLoaded', () => {
                     
                     const itemDiv = document.createElement('div');
                     itemDiv.className = 'attachment-item';
+                    const isSpoiler = attachment.name.includes('_SPOILER');
 
                     if (attachment.type === 'image') {
-                        const img = document.createElement('img');
-                        img.src = publicURL;
-                        img.alt = attachment.name;
-                        img.className = 'attachment-image';
-                        img.onclick = (e) => { e.stopPropagation(); window.openImageModal(publicURL); };
-                        itemDiv.appendChild(img);
+                        if (isSpoiler) {
+                            // スポイラー表示
+                            const wrapper = document.createElement('div');
+                            wrapper.className = 'sensitive-media-wrapper is-blurred';
+                            
+                            const img = document.createElement('img');
+                            img.src = publicURL;
+                            img.alt = attachment.name;
+                            img.className = 'attachment-image';
+
+                            // モザイク解除時のみ拡大可能
+                            img.onclick = (e) => { 
+                                e.stopPropagation();
+                                if (!wrapper.classList.contains('is-blurred')) window.openImageModal(publicURL);
+                            };
+
+                            const warning = document.createElement('div');
+                            warning.className = 'sensitive-warning';
+                            warning.innerHTML = `<p>${getEmoji("⚠️")} センシティブな画像</p><button>表示する</button>`;
+                            
+                            // 表示ボタンクリック処理
+                            warning.querySelector('button').onclick = (e) => {
+                                e.stopPropagation();
+                                wrapper.classList.remove('is-blurred');
+                                warning.remove();
+                            };
+
+                            wrapper.appendChild(img);
+                            wrapper.appendChild(warning);
+                            itemDiv.appendChild(wrapper);
+                        } else {
+                            // 通常表示
+                            const img = document.createElement('img');
+                            img.src = publicURL;
+                            img.alt = attachment.name;
+                            img.className = 'attachment-image';
+                            img.onclick = (e) => { e.stopPropagation(); window.openImageModal(publicURL); };
+                            itemDiv.appendChild(img);
+                        }
                     } else if (attachment.type === 'video') {
                         const video = document.createElement('video');
                         video.src = publicURL;
@@ -1906,8 +1998,9 @@ window.addEventListener('DOMContentLoaded', () => {
             let metrics, metricsMap;
 
             const metricsPromise = (async () => {
-                const { data: metricsData } = await supabase.rpc('get_post_metrics', { post_ids: postIdsArray });
-                metricsMap = new Map((metricsData ?? []).map(c => [c.post_id, c]));
+                const { data: metricsData, error } = await supabase.rpc('get_post_metrics', { post_ids: postIdsArray });
+                if (error || !metricsData) return;
+                metricsMap = new Map(metricsData.map(c => [c.post_id, c]));
 
                 if (mainPost.reply_to_post) {
                     metrics = metricsMap.get(mainPost.reply_to_post.id);
@@ -2902,8 +2995,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
                     const metricsPromise = (async () => {
                         // RPCで一括取得
-                        const { data: metricsData } = await supabase.rpc('get_post_metrics', { post_ids: postIdsForCounts });
-                        const metricsMap = new Map((metricsData ?? []).map(c => [c.post_id, c]));
+                        const { data: metricsData, error } = await supabase.rpc('get_post_metrics', { post_ids: postIdsForCounts });
+                        if (error || !metricsData) return;
+                        const metricsMap = new Map(metricsData.map(c => [c.post_id, c]));
                         
                         for (const post of posts) {
                             const targetId = post.repost_to && !post.content && post.reposted_post
@@ -3426,88 +3520,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
 
-            // ここからEmoji Mart
-            let _custom_emoji = await custom_emoji;
-            let custom = [];
-            let value_e;
-            for (let i = 0; i < _custom_emoji.length; i++){
-                value_e = _custom_emoji[i];
-                custom.push({
-                    id: value_e.id,
-                    name: value_e.name,
-                    keywords: [
-                        value_e.id,
-                        value_e.name,
-                        "NyaXEmoji"
-                    ],
-                    skins: [
-                        {
-                            src: `emoji/${value_e.id}.svg`
-                        }
-                    ],
-                });
-            }
-    
-            const picker = DOM.editPostModal.querySelector('#emoji-picker');
-            const pic_button = DOM.editPostModal.querySelector('.emoji-pic-button');
-            const pickerOptions = {
-                onEmojiSelect: (emoji) => {
-                    let textarea = DOM.editPostModal.querySelector('textarea');
-                    const text_start = textarea.selectionStart;
-                    const text_end = textarea.selectionEnd;
-                    const text = textarea.value;
-                    
-                    let moji;
-                    if(emoji.keywords.includes("NyaXEmoji")) moji = `${isNotBlank(text.slice(text_start - 1, text_start)) ? " " : ""}_${emoji.id}_${(isNotBlank(text.slice(text_end, text_end + 1)) || text.slice(text_end, text_end + 1) == '') ? " " : ""}`;
-                    else moji = emoji.native;
-    
-                    textarea.value = text.slice(0, text_start) + moji + text.slice(text_end);
-                    textarea.focus();
-                    textarea.setSelectionRange(text_start + moji.length, text_start + moji.length);
-    
-                    picker.classList.add('hidden');
-                },
-                set: "native",
-                searchPosition: "none",
-                locale: "ja",
-                custom: [
-                    {
-                        id: 'nyax',
-                        name: 'NyaXEmoji',
-                        emojis: custom
-                    }
-                ],
-                categoryIcons: {
-                    nyax: {
-                        svg: ICONS.nyax_logo
-                    }
-                },
-                categories: ['frequent', 'nyax', 'people', 'nature', 'foods', 'activity', 'places', 'objects', 'symbols', 'flags'],
-                skinTonePosition: 'none',
-                skin: '1'
-            };
-            const picker_modal = new EmojiMart.Picker(pickerOptions);
-            picker.appendChild(picker_modal);
-    
-            pic_button.addEventListener('click', () => {
-                picker.classList.toggle('hidden');
-    
-                if(!picker.classList.contains('hidden')) {
-                    const buttonRect = pic_button.getBoundingClientRect();
-                    const pickerWidth = 320;
-                    const pickerHeight = 400;
-                    let left = buttonRect.left;
-                    let top = buttonRect.top;
-    
-                    if (left + pickerWidth > window.innerWidth) left = window.innerWidth - pickerWidth - 8;
-                    if (left < 8) left = 8;
-                    if (top < 8) top = buttonRect.buttom + 8;
-    
-                    picker.style.left = `${left}px`;
-                    picker.style.top = `${top + 50}px`;
-                }
-            });
-            // ここまでEmoji Mart
+            await emoji_picker_create(DOM.editPostModalContent);
             
             DOM.editPostModal.querySelector('#update-post-button').onclick = () => handleUpdatePost(postId, currentAttachments, filesToAdd, Array.from(filesToDelete));
             DOM.editPostModal.querySelector('.modal-close-btn').onclick = () => DOM.editPostModal.classList.add('hidden');
@@ -3935,88 +3948,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>`;
 
-            // ここからEmoji Mart
-            let _custom_emoji = await custom_emoji;
-            let custom = [];
-            let value_e;
-            for (let i = 0; i < _custom_emoji.length; i++){
-                value_e = _custom_emoji[i];
-                custom.push({
-                    id: value_e.id,
-                    name: value_e.name,
-                    keywords: [
-                        value_e.id,
-                        value_e.name,
-                        "NyaXEmoji"
-                    ],
-                    skins: [
-                        {
-                            src: `emoji/${value_e.id}.svg`
-                        }
-                    ],
-                });
-            }
-    
-            const picker = DOM.editDmMessageModal.querySelector('#emoji-picker');
-            const pic_button = DOM.editDmMessageModal.querySelector('.emoji-pic-button');
-            const pickerOptions = {
-                onEmojiSelect: (emoji) => {
-                    let textarea = DOM.editDmMessageModal.querySelector('textarea');
-                    const text_start = textarea.selectionStart;
-                    const text_end = textarea.selectionEnd;
-                    const text = textarea.value;
-                    
-                    let moji;
-                    if(emoji.keywords.includes("NyaXEmoji")) moji = `${isNotBlank(text.slice(text_start - 1, text_start)) ? " " : ""}_${emoji.id}_${(isNotBlank(text.slice(text_end, text_end + 1)) || text.slice(text_end, text_end + 1) == '') ? " " : ""}`;
-                    else moji = emoji.native;
-    
-                    textarea.value = text.slice(0, text_start) + moji + text.slice(text_end);
-                    textarea.focus();
-                    textarea.setSelectionRange(text_start + moji.length, text_start + moji.length);
-    
-                    picker.classList.add('hidden');
-                },
-                set: "native",
-                searchPosition: "none",
-                locale: "ja",
-                custom: [
-                    {
-                        id: 'nyax',
-                        name: 'NyaXEmoji',
-                        emojis: custom
-                    }
-                ],
-                categoryIcons: {
-                    nyax: {
-                        svg: ICONS.nyax_logo
-                    }
-                },
-                categories: ['frequent', 'nyax', 'people', 'nature', 'foods', 'activity', 'places', 'objects', 'symbols', 'flags'],
-                skinTonePosition: 'none',
-                skin: '1'
-            };
-            const picker_modal = new EmojiMart.Picker(pickerOptions);
-            picker.appendChild(picker_modal);
-    
-            pic_button.addEventListener('click', () => {
-                picker.classList.toggle('hidden');
-    
-                if(!picker.classList.contains('hidden')) {
-                    const buttonRect = pic_button.getBoundingClientRect();
-                    const pickerWidth = 320;
-                    const pickerHeight = 400;
-                    let left = buttonRect.left;
-                    let top = buttonRect.top;
-    
-                    if (left + pickerWidth > window.innerWidth) left = window.innerWidth - pickerWidth - 8;
-                    if (left < 8) left = 8;
-                    if (top < 8) top = buttonRect.buttom + 8;
-    
-                    picker.style.left = `${left}px`;
-                    picker.style.top = `${top + 50}px`;
-                }
-            });
-            // ここまでEmoji Mart
+            await emoji_picker_create(DOM.editDmMessageModalContent);
             
             updatePreview();
 
