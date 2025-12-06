@@ -1003,16 +1003,17 @@ window.addEventListener('DOMContentLoaded', () => {
             previewItem.dataset.spoiler = "false";
             previewItem.dataset.index = index;
 
+            // 削除ボタン (いるのか？)
             const removeBtn = `<button class="file-preview-remove" data-index="${index}">×</button>`;
             
-            // スポイラーボタン (画像のみ)
+            // スポイラーボタン (画像・動画の場合のみ)
             let spoilerBtn = '';
             if (file.type.startsWith('image/')) {
                 spoilerBtn = `<button class="spoiler-toggle-btn" title="センシティブ設定 (クリックで切り替え)">${ICONS.flag}</button>`;
             }
-            
-            // 旗アイコンを追加
+
             const attachFlagEvent = () => {
+                // querySelector は previewItem が DOM に追加されてから実行するのが最も安全
                 const btn = previewItem.querySelector('.spoiler-toggle-btn'); 
                 if (btn) {
                     btn.onclick = (e) => {
@@ -1507,7 +1508,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
                             const warning = document.createElement('div');
                             warning.className = 'sensitive-warning';
-                            warning.innerHTML = `<p>${getEmoji("⚠️")} センシティブな画像</p><button>表示する</button>`;
+                            warning.innerHTML = `<p>センシティブな画像</p><button>表示する</button>`;
                             
                             // 表示ボタンクリック処理
                             warning.querySelector('button').onclick = (e) => {
