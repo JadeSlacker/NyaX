@@ -619,7 +619,6 @@ img.emoji{
     position: relative;
 }
 
-/* プレビュー画像のサイズが見づらい＆旗を押しやすいように10%大きくする */
 .file-preview-item img, .file-preview-item video {
     max-width: 100px;
     max-height: 100px;
