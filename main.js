@@ -1003,17 +1003,13 @@ window.addEventListener('DOMContentLoaded', () => {
             previewItem.dataset.spoiler = "false";
             previewItem.dataset.index = index;
 
-            // 削除ボタン (いるのか？)
-            const removeBtn = `<button class="file-preview-remove" data-index="${index}">×</button>`;
-            
-            // スポイラーボタン (画像・動画の場合のみ)
+            // スポイラーボタン (画像の場合のみ)
             let spoilerBtn = '';
             if (file.type.startsWith('image/')) {
                 spoilerBtn = `<button class="spoiler-toggle-btn" title="センシティブ設定 (クリックで切り替え)">${ICONS.flag}</button>`;
             }
 
             const attachFlagEvent = () => {
-                // querySelector は previewItem が DOM に追加されてから実行するのが最も安全
                 const btn = previewItem.querySelector('.spoiler-toggle-btn'); 
                 if (btn) {
                     btn.onclick = (e) => {
@@ -1035,7 +1031,7 @@ window.addEventListener('DOMContentLoaded', () => {
             if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    previewItem.innerHTML = `${spoilerBtn}<img src="${e.target.result}" alt="${file.name}">${removeBtn}`;
+                    previewItem.innerHTML = `${spoilerBtn}<img src="${e.target.result}" alt="${file.name}"><button class="file-preview-remove" data-index="${index}">×</button>`;
                     previewContainer.appendChild(previewItem);
                     attachFlagEvent();
                 };
@@ -1043,14 +1039,16 @@ window.addEventListener('DOMContentLoaded', () => {
             } else if (file.type.startsWith('video/')) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    previewItem.innerHTML = `<video src="${e.target.result}" controls></video>${removeBtn}`;
+                    previewItem.innerHTML = `<video src="${e.target.result}" controls></video><button class="file-preview-remove" data-index="${index}">×</button>`;
                     previewContainer.appendChild(previewItem);
                 };
                 reader.readAsDataURL(file);
             } else if (file.type.startsWith('audio/')) {
                 previewItem.innerHTML = `<span>${getEmoji("🎵")} ${getEmoji(escapeHTML(file.name))}</span><button class="file-preview-remove" data-index="${index}">×</button>`;
+                previewContainer.appendChild(previewItem);
             } else {
                 previewItem.innerHTML = `<span>${getEmoji("📄")} ${getEmoji(escapeHTML(file.name))}</span><button class="file-preview-remove" data-index="${index}">×</button>`;
+                previewContainer.appendChild(previewItem);
             }
         });
         
@@ -2318,23 +2316,21 @@ window.addEventListener('DOMContentLoaded', () => {
                             previewItem.innerHTML = `<img src="${e.target.result}" alt="${file.name}"><button class="file-preview-remove" data-index="${index}">×</button>`;
                         };
                         reader.readAsDataURL(file);
+                        previewContainer.appendChild(previewItem);
                     } else if (file.type.startsWith('video/')) {
                         const reader = new FileReader();
                         reader.onload = (e) => {
-                            previewItem.innerHTML = `<video src="${e.target.result}" style="width:100px; height:100px; object-fit:cover;" controls></video><button class="file-preview-remove" data-index="${index}">×</button>`;
+                            previewItem.innerHTML = `<video src="${e.target.result}" controls></video><button class="file-preview-remove" data-index="${index}">×</button>`;
+                            previewContainer.appendChild(previewItem);
                         };
                         reader.readAsDataURL(file);
                     } else if (file.type.startsWith('audio/')) {
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                            previewItem.innerHTML = `<div style="display:flex; align-items:center; gap:0.5rem;"><audio src="${e.target.result}" controls style="height: 30px; width: 200px;"></audio><button class="file-preview-remove" data-index="${index}" style="position:relative; top:0; right:0;">×</button></div>`;
-                        };
-                        reader.readAsDataURL(file);
+                        previewItem.innerHTML = `<span>${getEmoji("🎵")} ${getEmoji(escapeHTML(file.name))}</span><button class="file-preview-remove" data-index="${index}">×</button>`;
+                        previewContainer.appendChild(previewItem);
                     } else {
-                        previewItem.innerHTML = `<span>📄 ${escapeHTML(file.name)}</span><button class="file-preview-remove" data-index="${index}">×</button>`;
+                        previewItem.innerHTML = `<span>${getEmoji("📄")} ${getEmoji(escapeHTML(file.name))}</span><button class="file-preview-remove" data-index="${index}">×</button>`;
+                        previewContainer.appendChild(previewItem);
                     }
-                    
-                    previewContainer.appendChild(previewItem);
                 });
             };
 
