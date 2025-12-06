@@ -2316,21 +2316,23 @@ window.addEventListener('DOMContentLoaded', () => {
                             previewItem.innerHTML = `<img src="${e.target.result}" alt="${file.name}"><button class="file-preview-remove" data-index="${index}">×</button>`;
                         };
                         reader.readAsDataURL(file);
-                        previewContainer.appendChild(previewItem);
                     } else if (file.type.startsWith('video/')) {
                         const reader = new FileReader();
                         reader.onload = (e) => {
-                            previewItem.innerHTML = `<video src="${e.target.result}" controls></video><button class="file-preview-remove" data-index="${index}">×</button>`;
-                            previewContainer.appendChild(previewItem);
+                            previewItem.innerHTML = `<video src="${e.target.result}" style="width:100px; height:100px; object-fit:cover;" controls></video><button class="file-preview-remove" data-index="${index}">×</button>`;
                         };
                         reader.readAsDataURL(file);
                     } else if (file.type.startsWith('audio/')) {
-                        previewItem.innerHTML = `<span>${getEmoji("🎵")} ${getEmoji(escapeHTML(file.name))}</span><button class="file-preview-remove" data-index="${index}">×</button>`;
-                        previewContainer.appendChild(previewItem);
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            previewItem.innerHTML = `<div style="display:flex; align-items:center; gap:0.5rem;"><audio src="${e.target.result}" controls style="height: 30px; width: 200px;"></audio><button class="file-preview-remove" data-index="${index}" style="position:relative; top:0; right:0;">×</button></div>`;
+                        };
+                        reader.readAsDataURL(file);
                     } else {
-                        previewItem.innerHTML = `<span>${getEmoji("📄")} ${getEmoji(escapeHTML(file.name))}</span><button class="file-preview-remove" data-index="${index}">×</button>`;
-                        previewContainer.appendChild(previewItem);
+                        previewItem.innerHTML = `<span>📄 ${escapeHTML(file.name)}</span><button class="file-preview-remove" data-index="${index}">×</button>`;
                     }
+                    
+                    previewContainer.appendChild(previewItem);
                 });
             };
 
